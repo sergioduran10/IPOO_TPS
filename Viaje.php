@@ -4,17 +4,18 @@ class Viaje{
     private $codViaje;
     private $destino;
     private $cantMaxPasajeros;
-    private $pasajeros;
-
+    private $pasajeros = [];
+    private $objResponsable;
     
      //Método constructor
  
-    public function __construct($codViaje, $destino, $cantMaxPasajeros, $pasajeros)
-    {
+    public function __construct($codViaje, $destino, $cantMaxPasajeros, $pasajeros, $objResponsable){
+
         $this->codViaje = $codViaje;
         $this->destino = $destino;
         $this->cantMaxPasajeros = $cantMaxPasajeros;
         $this->pasajeros = $pasajeros;
+        $this->objResponsable = $objResponsable;
     }
 
     // Métodos de acceso
@@ -26,12 +27,14 @@ class Viaje{
         $this->codViaje = $nuevoCodViaje;
     }
 
+
     public function getDestino(){
         return $this->destino;
     }
     public function setDestino($nuevoDestino){
         $this->destino = $nuevoDestino;
     }
+
 
     public function getCantMaxPasajeros(){
         return $this->cantMaxPasajeros;
@@ -40,12 +43,23 @@ class Viaje{
         $this->cantMaxPasajeros = $nuevoCantMaxPasajeros;
     }
 
+
     public function getPasajeros(){
         return $this->pasajeros;
     }
     public function setPasajeros($nuevoPasajeros){
         $this->pasajeros = $nuevoPasajeros;
     }
+
+
+    public function getObjResponsable(){
+        return $this->objResponsable;
+    }
+    public function setObjResponsable($nuevoObjResponsable){
+        $this->objResponsable = $nuevoObjResponsable;
+    }
+
+
 
     // Métodos varios
 
@@ -113,22 +127,52 @@ class Viaje{
      */
     public function mostrarPasajero($indicePasajero){
         $arrayPasajeros = $this->getPasajeros();
-        echo
+        //echo $arrayPasajeros->__toString();
         "\nPasajero número " . $indicePasajero .
         "\nNombre: " . $arrayPasajeros[$indicePasajero]["nombre"] .
         "\nApellido: " . $arrayPasajeros[$indicePasajero]["apellido"] .
         "\nNúmero de documento: " . $arrayPasajeros[$indicePasajero]["numeroDoc"];
     }
 
+  
+
+
+    // Metodo para modificar los datos del responsable
+    /**
+     * Modifica los datos de un responsable. Se puede usar "*" para dejar algún dato igual
+     * @return boolean
+     */
+    public function modificarResponsable($nroEmpleado, $nroLicencia, $nombre, $apellido){
+
+        $objResponsable = $this->getObjResponsable();
+        $bandera = true;
+
+        if ($nroEmpleado != "*") {
+            $objResponsable->setNumDeEmpleado($nroEmpleado);
+        }
+        if ($nroLicencia != "*") {
+            $objResponsable->setNumLicencia($nroLicencia);
+        }
+        if ($nombre != "*") {
+            $objResponsable->setNombre($nombre);
+        }
+        if ($apellido != "*") {
+            $objResponsable->setApellido($apellido);
+        }
+        return $bandera;
+    }
+
     // Método __toString
 
     public function __toString()
     {
+        $objPasajero = $this->getPasajeros();
         return
         "\nCódigo de viaje: " . $this->getCodViaje().
-        "\nDestino: " . $this->getDestino().
+        "\nDestino del viaje: " . $this->getDestino().
         "\nCantidad máxima de pasajeros: " . $this->getCantMaxPasajeros().
-        "\nCantidad de pasajeros: " . count($this->getPasajeros());
+        "\nPasajeros.. " . $objPasajero . 
+        "\nResponsable.. " . $this->getObjResponsable();
     }
 }
 

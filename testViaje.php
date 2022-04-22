@@ -1,19 +1,23 @@
 <?php
 
 include 'Viaje.php';
+include 'Pasajero.php';
+include 'Responsable.php';
 
 /**
  * Precarga datos de viaje
  * @return array
  */
-function precargaPasajeros(){
-    $arrayPsj[0] = ["nombre" => "Juan", "apellido" => "Gómez", "numeroDoc" => 31142341];
-    $arrayPsj[1] = ["nombre" => "Enrique", "apellido" => "Hernandez", "numeroDoc" => 24512552];
-    $arrayPsj[2] = ["nombre" => "Gus", "apellido" => "Fernandez", "numeroDoc" => 42482967];
-    $arrayPsj[3] = ["nombre" => "Patricio", "apellido" => "Estrada", "numeroDoc" => 35243434];
-    $arrayPsj[4] = ["nombre" => "Roberto", "apellido" => "Peña", "numeroDoc" => 31231241];
-    return $arrayPsj;
-}
+//function precargaPasajeros(){
+ //   $arrayPsj[0] = ["nombre" => "Juan", "apellido" => "Gómez", "numeroDoc" => 31142341];
+ //   $arrayPsj[1] = ["nombre" => "Enrique", "apellido" => "Hernandez", "numeroDoc" => 24512552];
+ //   $arrayPsj[2] = ["nombre" => "Gus", "apellido" => "Fernandez", "numeroDoc" => 42482967];
+ //   $arrayPsj[3] = ["nombre" => "Patricio", "apellido" => "Estrada", "numeroDoc" => 35243434];
+//    $arrayPsj[4] = ["nombre" => "Roberto", "apellido" => "Peña", "numeroDoc" => 31231241];
+ //   return $arrayPsj;
+//}
+
+
 
 /**
  * Pide un número y se asegura de que se encuentre en un rango. Retorna un número válido
@@ -46,10 +50,11 @@ function menu(){
         3) Eliminar pasajero
         4) Ver datos de viaje
         5) Ver información de un pasajero
-        6) Salir
+        6) Modificar responsable del viaje
+        7) Salir
         -----------------------------------
         Respuesta: ";
-    $respuesta = rango(1, 6);
+    $respuesta = rango(1, 7);
     return $respuesta;
 }
 
@@ -62,6 +67,7 @@ $codigoDeViaje = "";
 $destino = "";
 $cantidadMaxPasajeros = "";
 
+/*
 // Se pregunta si se quiere precargar datos
 echo "¿Desea usar datos precargados? (si/no): ";
 $respuestaPrecarga = trim(fgets(STDIN));
@@ -80,9 +86,31 @@ if($respuestaPrecarga == "si"){
     $cantidadMaxPasajeros = trim(fgets(STDIN));
     $arrayPasajeros = [];
 }
+*/
+    echo "---- Ingrese los datos del viaje ----\n";
+    echo "Ingrese el código de viaje: ";
+    $codigoDeViaje = trim(fgets(STDIN));
+    echo "Ingrese el destino: ";
+    $destino = trim(fgets(STDIN));
+    echo "Ingrese la cantidad máxima de pasajeros: ";
+    $cantidadMaxPasajeros = trim(fgets(STDIN));
+    $arrayPasajeros = [];
 
-// Se crea el objeto
-$objViaje = new Viaje($codigoDeViaje, $destino, $cantidadMaxPasajeros, $arrayPasajeros);
+
+    //Obj Responsable
+    echo "---- Ingrese Los datos del responsable del viaje ----\n";
+	echo "Ingrese el numero del empleado: ";
+	$numeroEmpleado = trim(fgets(STDIN));
+	echo "Ingrese el numero de licencia: ";
+	$numeroLicencia = trim(fgets(STDIN));
+	echo "Ingrese el nombre del responsable: ";
+	$nombreResponsable = trim(fgets(STDIN));
+	echo "Ingrese el apellido del responsable: ";
+	$apellidoResponsable = trim(fgets(STDIN));
+
+
+$objResponsable = new Responsable($numeroEmpleado, $numeroLicencia, $nombreResponsable, $apellidoResponsable);
+$objViaje = new Viaje($codigoDeViaje, $destino, $cantidadMaxPasajeros, $arrayPasajeros, $objResponsable);
 
 do{
     $respuestaMenu = menu();
@@ -136,7 +164,22 @@ do{
             $numeroPsj = rango(0, count($objViaje->getPasajeros()) - 1);
             $objViaje->mostrarPasajero($numeroPsj);
             break;
+        case 6;
+            echo "---- Modificar responsable ----\n";
+            echo "Ingrese el nuevo numero del empleado: ";
+            $nuevoNroEmpleado = trim(fgets(STDIN));
+            echo "Ingrese el nuevo numero de licencia: ";
+            $nuevoNroLicencia = trim(fgets(STDIN));
+            echo "Ingre el nombre del nuevo responsable: ";
+            $nuevoNombre = trim(fgets(STDIN));
+            echo "ingrese el apellido del nuevo responsable: ";
+            $nuevoApellido = trim(fgets(STDIN));
+            $modificacion = $objViaje->modificarResponsable($nuevoNroEmpleado, $nuevoNroLicencia, $nuevoNombre, $nuevoApellido);
+				//Se muestra un msj según el resultado de las modificaciones:
+				$resultado = ($modificacion?"Se modificaron los datos exitosamente. ":"Los datos no se pudieron modificar.");
+				echo $resultado;
+            break;
     }
-}while($respuestaMenu != 6);
+}while($respuestaMenu != 7);
 
 ?>
